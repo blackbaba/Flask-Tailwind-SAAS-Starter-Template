@@ -4,7 +4,7 @@
 
 1. Clone this repo and create a virtual environment (`python3 -m venv venv`) for use with this application.
 2. Activate the virtual environment (`source venv/bin/activate`) and run `pip install -r requirements.txt` to install package dependencies.
-3. Download the [TailwindCSS standalone build tool](https://github.com/tailwindlabs/tailwindcss/releases/tag/v3.0.7) and place the executable in the project folder.
+3. Download the [TailwindCSS standalone build tool](https://tailwindcss.com/blog/standalone-cli) and place the executable in the project folder.
 4. In one terminal - run `./tailwindcss -i ./app/static/src/css/tailwind.css -o ./app/static/src/css/index.css --watch`. This will start the Tailwind JIT Watcher and will compile your CSS on the fly.
 5. In the second terminal - setup some ENV variables required to run the Flask application:
    - Run `export FLASK_APP=run.py` (use `set` instead of `export` for windows)
