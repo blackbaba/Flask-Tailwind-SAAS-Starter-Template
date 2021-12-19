@@ -1,0 +1,12 @@
+.flaskenv
+.env
+*.sqlite
+.DS_Store
+
+venv
+node_modules
+__pycache__
+.webassets-cache
+
+index.css
+tailwindcss
