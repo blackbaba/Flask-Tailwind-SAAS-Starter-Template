@@ -10,7 +10,8 @@
    - Run `export FLASK_APP=run.py` (use `set` instead of `export` for windows)
    - Run `export FLASK_ENV=development`
    - Customise the application configuration in `config.py` as per your requirements
-   - Run `flask run` to start the Flask development server.
+   - Run `flask db upgrade` to intialise database
+   - Run `flask run` to start the Flask development server
 6. You can now add/remove CSS in your jinja templates, it will be auto-compiled by the compiler running in step 4. You will see the Tailwind CSS styles when you refresh your browser (Flask server) window.
 7. Before deploying to production:
    - Stop the flask server and the Tailwind CLI build tool.
