@@ -14,8 +14,8 @@ def inject_now():
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
-    # flash('This is a huge error man !', category='error')
-    flash('This is a flash message.', category='information',)
+    # flash('This is an error !', category='error')
+    # flash('This is an informational message.', category='information',)
     return render_template('index.html')
 
 
