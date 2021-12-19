@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block head %}
+
+    <title>Flask Tailwind SAAS Starter Template
+        {% if title %}
+        - {{title}}
+        {% else %}
+
+        {% endif %}
+    </title>
+    {% endblock %}
+
+    {# CSS Asset Bundle #}
+    {% assets 'main_css' %}
+    <link rel="stylesheet" href="{{ ASSET_URL }}">
+    {% endassets %}
+</head>
+
+<body class="bg-gradient-to-br from-flasky-100 via-flask-50 to-flasky-100">
+    <div id="flash_messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        {% if category=='error' %}
+        <p
+            class="border-b-2 w-full px-6 pt-2 pb-1 text-sm text-error-700 bg-gradient-to-r from-error-500 via-error-300 to-error-400 font-semibold text-center tracking-wider cursor-default">
+            {{ message }}</p>
+        {% else %}
+        <p
+            class="border-b-2 w-full px-6 pt-2 pb-1 text-sm text-flasky-700 bg-gradient-to-r from-flasky-500 via-flasky-300 to-flasky-400 font-semibold text-center tracking-wider cursor-default">
+            {{ message }}</p>
+        {% endif %}
+
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+    <div class="flex flex-col justify-between min-h-screen">
+        <div id="header">
+            {% include '_header.html' %}
+        </div>
+        <div id="main" class="pb-6">
+            {% block body %}
+
+            {% endblock %}
+        </div>
+        <div id="footer">
+            {% include '_footer.html' %}
+        </div>
+    </div>
+    {% block scripts %}
+
+    {# JS Asset Bundle #}
+    {% assets "js_all" %}
+    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    {% endblock scripts %}
+</body>
+
+</html>

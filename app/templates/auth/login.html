@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="mx-auto container my-auto h-full flex items-center justify-center">
+    <div class="flex flex-col items-start">
+        <p class="text-left text-2xl text-flasky-500 font-bold tracking-wide">Log in</p>
+
+
+        <form method="POST" class="flex flex-col">
+            {{ form.hidden_tag() }}
+            <div class="text-flasky-600">
+                {% for error in form.email.errors %}
+                <p class="my-2 border text-xs border-flasky-500 px-2 py-1 rounded shadow font-bold">{{ error }}</p>
+                {% endfor %}
+                {% for error in form.password.errors %}
+                <p class="my-2 border text-xs border-flasky-500 px-2 py-1 rounded shadow font-bold">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {{ form.email.label(class='mt-6 text-sm font-semibold text-flasky-500') }}
+            {{ form.email(class ='shadow appearance-none focus:border-flasky-500 focus:border-2 border-flasky-500 border
+            rounded w-full py-2 px-3 text-gray-700 leading-tight
+            focus:outline-none focus:shadow-outline') }}
+            {{ form.password.label(class='mt-4 text-sm font-semibold text-flasky-500') }}
+            {{ form.password(required=False, class ='shadow appearance-none focus:border-flasky-500 focus:border-2
+            border-flasky-500
+            border rounded w-full py-2 px-3 text-gray-700 leading-tight
+            focus:outline-none focus:shadow-outline') }}
+            <div class="mt-4 text-sm space-x-2 flex items-center text-flasky-500 font-semibold ">
+                {{ form.remember_me.label }}
+                {{ form.remember_me(class =' text-flasky-500 appearance-none focus:outline-none border-flasky-500
+                rounded') }}
+            </div>
+            {{form.submit(class='hover:text-white hover:bg-flasky-500 cursor-pointer px-4 py-1 border border-flasky-500
+            text-flasky-500
+            rounded-full mt-6 font-bold w-32')}}
+        </form>
+        <p class="text-sm mt-6 text-flasky-600">Not a user? <a
+                class="decoration-flasky-500 decoration-2 underline underline-offset-2"
+                href="{{url_for('auth.signup')}}">Sign up
+                here</a></p>
+
+    </div>
+</div>
+
+
+{% endblock body %}
