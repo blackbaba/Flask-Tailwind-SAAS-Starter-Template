@@ -31,5 +31,4 @@ def privacy():
 
 @main.route('/health')
 def health_check():
-    # return f"{app.config['MAIL_SERVER']}"
     return render_template('health.html')
