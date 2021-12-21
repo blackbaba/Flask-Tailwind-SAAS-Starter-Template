@@ -5,13 +5,17 @@ BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard-to-guess-string'
-    MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', 'true').lower() in [
-        'true', 'on', '1']
+    # MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', 'true').lower() in [
+    #     'true', 'on', '1']
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    FTSAAS_MAIL_SUBJECT_PREFIX = '[Flask Tailwind SAAS Template] '
-    FTSAAS_MAIL_SENDER = 'Admin <flasktailwindsaas@example.com>'
-    FTSAAS_ADMIN = os.environ.get('FTSAAS_ADMIN')
+    FLASKY_MAIL_SUBJECT_PREFIX = '[Flask Tailwind SAAS Template] '
+    FLASKY_MAIL_SENDER = 'Admin <flasktailwindsaas@example.com>'
+    FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
+    MAIL_SERVER = 'smtp.mailtrap.io'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = False
+    # MAIL_USE_SSL = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     @staticmethod

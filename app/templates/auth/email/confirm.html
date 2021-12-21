@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flasky confirmation email</title>
+</head>
+
+<body>
+    Dear {{ user.username }},
+    <br>
+    Welcome to Flask Tailwind SAAS Starter!
+    <br>
+    To confirm your account please click on the following link:
+    <br>
+    {{ url_for('auth.confirm', token=token, _external=True) }}
+    <br>
+    Sincerely,
+    <br>
+    Flask Tailwind SAAS Starter Team
+    <br>
+    Note: replies to this email address are not monitored.
+</body>
+
+</html>

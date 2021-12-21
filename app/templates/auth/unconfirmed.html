@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+
+<div class="mx-auto w-2/4 text-flasky-500">
+    <p class="text-2xl font-bold">
+        Hello {{current_user.username}}
+
+    </p>
+    <p class="font-semibold">You have not confirmed your email. Please click <span class="text-flasky-600 underline"><a
+                href="{{url_for('auth.resend_confirmation')}}">here</a></span> to resend a confirmation email.</p>
+
+</div>
+
+{% endblock body %}
