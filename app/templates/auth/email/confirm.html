@@ -9,19 +9,16 @@
 </head>
 
 <body>
-    Dear {{ user.username }},
-    <br>
-    Welcome to Flask Tailwind SAAS Starter!
-    <br>
-    To confirm your account please click on the following link:
-    <br>
-    {{ url_for('auth.confirm', token=token, _external=True) }}
-    <br>
-    Sincerely,
-    <br>
-    Flask Tailwind SAAS Starter Team
-    <br>
-    Note: replies to this email address are not monitored.
+    <h1>Dear {{ user.username }},</h1>
+    <h2>Welcome to Flask Tailwind SAAS Starter!</h2>
+    <p>
+        To confirm your account please click on the following
+        <a href=" {{ url_for('auth.confirm', token=token, _external=True) }}">link</a>
+    </p>
+    <p>Sincerely</p>
+    <p>Flask Tailwind SAAS Starter Team</p>
+
+    <small>Note: replies to this email address are not monitored.</small>
 </body>
 
 </html>

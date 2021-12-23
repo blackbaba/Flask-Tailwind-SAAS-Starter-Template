@@ -14,8 +14,8 @@ class Config:
     FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
     MAIL_SERVER = 'smtp.mailtrap.io'
     MAIL_PORT = 587
-    MAIL_USE_TLS = False
-    # MAIL_USE_SSL = True
+    MAIL_USE_TLS = True
+    MAIL_USE_SSL = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     @staticmethod
