@@ -1,5 +1,7 @@
 # Flask and TailwindCSS SAAS App Starter Template
 
+![Flask Tailwind SAAS Starter Preview](app/static/preview.png)
+
 ## How to use
 
 1. Clone this repo and create a virtual environment (`python3 -m venv venv`) for use with this application.
