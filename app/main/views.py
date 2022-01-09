@@ -83,12 +83,12 @@ def edit_profile_admin(username):
 
 @main.route('/terms-and-conditions')
 def terms_conditions():
-    return "This is the terms and conditions page"
+    return "Terms and conditions page"
 
 
 @main.route('/privacy')
 def privacy():
-    return "This is the privacy policy page"
+    return "Privacy policy page"
 
 
 @main.route('/admin')
