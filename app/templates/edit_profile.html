@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="mx-auto max-w-sm">
+    <div class="flex flex-col items-start px-6  ">
+        <p class="text-left text-2xl text-flasky-500 font-bold tracking-wide">Edit User Profile</p>
+
+
+        <form method="POST" class="flex flex-col w-full max-w-xs">
+            {{ form.hidden_tag() }}
+            <div class="text-flasky-600">
+                {% for error in form.name.errors %}
+                <p class="my-2 border text-xs border-flasky-500 px-2 py-1 rounded shadow font-bold">{{ error }}</p>
+                {% endfor %}
+                {% for error in form.location.errors %}
+                <p class="my-2 border text-xs border-flasky-500 px-2 py-1 rounded shadow font-bold">{{ error }}</p>
+                {% endfor %}
+                {% for error in form.about_me.errors %}
+                <p class="my-2 border text-xs border-flasky-500 px-2 py-1 rounded shadow font-bold">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {{ form.name.label(class='mt-6 text-sm font-semibold text-flasky-500') }}
+            {{ form.name(class ='shadow appearance-none focus:border-flasky-500 focus:border-2 border-flasky-500 border
+            rounded w-full py-2 px-3 text-gray-700 leading-tight
+            focus:outline-none focus:shadow-outline text-sm') }}
+            {{ form.location.label(class='mt-4 text-sm font-semibold text-flasky-500') }}
+            {{ form.location(required=False, class ='shadow appearance-none focus:border-flasky-500 focus:border-2
+            border-flasky-500
+            border rounded w-full py-2 px-3 text-gray-700 leading-tight
+            focus:outline-none focus:shadow-outline text-sm') }}
+            {{ form.about_me.label(class='mt-4 text-sm font-semibold text-flasky-500') }}
+            {{ form.about_me(required=False, class ='shadow appearance-none focus:border-flasky-500 focus:border-2
+            border-flasky-500
+            border rounded w-full py-2 px-3 text-gray-700 leading-tight
+            focus:outline-none focus:shadow-outline text-sm') }}
+
+            {{form.submit(class='hover:text-white hover:bg-flasky-500 cursor-pointer px-4 py-1 border border-flasky-500
+            text-flasky-500
+            rounded-full mt-6 font-bold w-32')}}
+        </form>
+
+
+    </div>
+</div>
+
+
+{% endblock body %}

@@ -10,6 +10,7 @@ module.exports = {
       white: colors.white,
       gray: colors.gray,
       error: colors.rose,
+      danger: colors.rose,
       message: colors.green,
       warning: colors.yellow,
       emerald: colors.emerald,

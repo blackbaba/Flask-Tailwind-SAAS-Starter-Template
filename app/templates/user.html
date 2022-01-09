@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="w-[360px] mx-auto px-2">
+    <img class="img-rounded profile-thumbnail shadow rounded-full" src="{{ user.gravatar(size=128) }}">
+    <span
+        class=" mt-6 inline-block bg-rose-500 text-sm font-semibold px-2 py-1 bg-flasky-500 text-white rounded shadow-sm">
+        {{user.username}}
+    </span>
+    <div class="mt-2 text-2xl text-gray-500 tracking-wider font-extrabold">{% if user.name %}
+        {{user.name}}
+        {% endif %}</div>
+    <div class="font-semibold text-flasky-600 underline underline-offset-1 decoration-flasky-400 decoration-2 mt-2">{%
+        if user.location %}
+        <a href="http://maps.google.com/?q={{ user.location }}">{{user.location}}</a>
+        {% endif %}
+    </div>
+    <div class="text-sm text-gray-500 mt-0">
+        {% if current_user.is_administrator() %}
+        <p class="underline underline-offset-1 decoration-flasky-400 decoration-2 "> <a
+                href="mailto:{{ user.email }}">{{ user.email }}</a></p>
+        {% endif %}
+
+        {% if user.about_me %}<p class="mt-6 border-l-4 border-l-flasky-500  text-sm rounded p-4 w-full max-w-xs">
+            {{
+            user.about_me }}</p>{% endif
+        %}
+    </div>
+
+    <div class="text-xs text-gray-400 mt-6">
+
+        <p>
+            Member since UTC {{ user.member_since.strftime('%d-%B-%Y') }} <br>
+            Last seen {{ user_last_seen_time_ago }}
+        </p>
+    </div>
+    <div class="mt-6 flex items-center space-x-2">
+        {% if user == current_user %}
+        <a class="px-2 py-1 rounded border border-flasky-500 text-flasky-500 font-semibold text-sm"
+            href="{{ url_for('main.edit_profile') }}"> Edit
+            Profile
+        </a>
+        {% endif %}
+
+        {% if current_user.is_administrator() %}
+        <a class="px-2 py-1 rounded border border-danger-500 text-danger-500 font-semibold text-sm"
+            href="{{ url_for('main.edit_profile_admin', username=user.username) }}">
+            Edit Profile [Admin]
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock body %}

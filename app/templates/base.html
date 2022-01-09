@@ -43,17 +43,21 @@
         {% endwith %}
     </div>
     <div class="flex flex-col justify-between min-h-screen">
-        <div id="header">
-            {% include '_header.html' %}
-        </div>
-        <div id="main" class="pb-6">
-            {% block body %}
+        <div>
+            <div>
 
-            {% endblock %}
+                {% include '_header.html' %}
+            </div>
+            <div class="mt-6">
+                {% block body %}
+
+                {% endblock %}
+            </div>
+
         </div>
-        <div id="footer">
-            {% include '_footer.html' %}
-        </div>
+        <div>{% include '_footer.html' %}</div>
+
+
     </div>
     {% block scripts %}
 

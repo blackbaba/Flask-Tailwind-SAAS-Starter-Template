@@ -1,19 +1,30 @@
-<div class="flex w-full items-center justify-between px-10 pt-2 text-flasky-600">
+<div class="flex w-full items-center justify-between px-6 pt-2 text-flasky-600">
     <!-- <a href="{{url_for('main.index')}}" class="mt-2  text-2xl font-bold  border-flasky-600 border-b-4">Flask
         Tailwind
         SAAS
         Template</a> -->
     <a href="{{url_for('main.index')}}" class="flex flex-col space-y-2 mt-4">
         <div class="flex items-center space-x-2">
-            <div class="w-5 bg-flasky-600 h-5 rounded-full"></div>
-            <div class="w-5 bg-flasky-500 h-5 rounded-full"></div>
-            <div class="w-5 bg-flasky-400 h-5 rounded-full"></div>
+            <div class="w-4 bg-flasky-600 h-4 rounded-full"></div>
+            <div class="w-4 bg-flasky-400 h-4 rounded-full"></div>
+            <div class="w-4 bg-flasky-400 h-4 rounded-full"></div>
         </div>
-        <div class="w-28 h-4 rounded-r-full bg-gradient-to-r from-flasky-600  to-flasky-400"></div>
+        <div class="w-24 h-4 rounded-r-full bg-gradient-to-r from-flasky-600  to-flasky-400"></div>
 
     </a>
+
     <div>
-        <ul class="w-full flex items-center justify-start space-x-2">
+        <ul class="w-full flex items-center justify-start space-x-4 mx-2">
+
+            {% if current_user.is_authenticated %}
+            <a class="hover:text-flasky-500 text-lg font-semibold"
+                href="{{ url_for('main.user', username=current_user.username) }}">
+                <img class="img-rounded profile-thumbnail shadow rounded-full"
+                    src="{{ current_user.gravatar(size=32) }}">
+            </a>
+
+            {% endif %}
+
             {% if current_user.is_authenticated %}
             <li>
                 <a class="hover:text-flasky-500 text-lg font-semibold" href="{{url_for('auth.logout')}}">Logout</a>
@@ -23,7 +34,6 @@
                 <a class="hover:text-flasky-500 text-lg font-semibold" href="{{url_for('auth.login')}}">Login</a>
 
             </li>
-            <li class="underline underline-offset-1">or</li>
             <li>
                 <a class="hover:text-flasky-500 text-lg font-semibold" href="{{url_for('auth.register')}}">Register</a>
 
