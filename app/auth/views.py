@@ -106,7 +106,7 @@ def password_reset_request():
             send_email(user.email, 'Reset Your Password',
                        'auth/email/reset_password',
                        user=user, token=token)
-        flash('An email with instructions to reset your password has been '
+        flash('If a user account with this email exists, an email with instructions to reset your password will be '
               'sent to you.')
         return redirect(url_for('auth.login'))
     return render_template('auth/reset_password.html', form=form)
@@ -123,5 +123,7 @@ def password_reset(token):
             flash('Your password has been updated.')
             return redirect(url_for('auth.login'))
         else:
+            flash('This link is not valid or has expired.')
             return redirect(url_for('main.index'))
+
     return render_template('auth/reset_password_form.html', form=form)
