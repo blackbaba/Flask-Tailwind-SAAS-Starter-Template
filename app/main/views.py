@@ -1,27 +1,40 @@
 import datetime as dt
 from inspect import currentframe
+import re
 import timeago
-from flask import render_template, session, redirect, url_for, flash
+from flask import render_template, session, redirect, url_for, flash, current_app
 from flask_login.utils import login_required, current_user
 from . import main
-from .forms import EditProfileForm, EditProfileAdminForm
+from .forms import EditProfileForm, EditProfileAdminForm, PostForm
 from .. import db
-from ..models import Role, User
+from ..models import Permission, Role, User, Post
 from ..email import send_email, send_async_email
 from ..decorators import admin_required
 
 
+@main.context_processor
+def inject_user():
+    return dict(dt=dt, timeago=timeago, current_app=current_app)
+
+
 @main.route('/', methods=['GET', 'POST'])
 def index():
+    form = PostForm()
+    if form.validate_on_submit() and current_user.can(Permission.WRITE):
+        post = Post(body=form.body.data,
+                    author=current_user._get_current_object())
+        db.session.add(post)
+        db.session.commit()
+        flash('Post created successfully')
+        return redirect(url_for('main.index'))
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
     # flash('This is an error !', category='error')
     # flash('This is an informational message.', category='information',)
-    return render_template('index.html')
+    return render_template('index.html', form=form, posts=posts)
 
 
 @main.route('/saas', methods=['GET', 'POST'])
 def saas():
-    # flash('This is an error !', category='error')
-    # flash('This is an informational message.', category='information',)
     return render_template('saas.html')
 
 
