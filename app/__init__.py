@@ -3,6 +3,7 @@ from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_assets import Environment, Bundle
 from flask_login import LoginManager
+from flask_pagedown import PageDown
 
 from config import config
 
@@ -11,6 +12,7 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 assets = Environment()
+pagedown = PageDown()
 
 # Setup JS and CSS Assets Bundles
 js = Bundle('src/js/index.js', filters='jsmin',
@@ -30,6 +32,7 @@ def create_app(config_name):
     db.init_app(app)
     login_manager.init_app(app)
     assets.init_app(app)
+    pagedown.init_app(app)
 
     # Import Blueprints
     from .main import main as main_blueprint

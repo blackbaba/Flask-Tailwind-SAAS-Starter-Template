@@ -11,9 +11,32 @@
             <div>{{ timeago.format(
                 post.timestamp, dt.datetime.utcnow()) }}</div>
         </div>
-        <div class="pt-1 text-sm text-gray-700 min-h-16">{{ post.body
-            |truncate(current_app.config.get('POST_MAX_LENGTH'))
-            }}</div>
+        <div class="pt-1 text-sm text-gray-700 min-h-16">
+            {% if post.body_html %}
+            {{ post.body_html | safe | truncate(current_app.config.get('POST_MAX_LENGTH')) }}
+            {% else %}
+            {{ post.body |truncate(current_app.config.get('POST_MAX_LENGTH')) }}
+            {% endif %}
+        </div>
+        <div class="flex mt-4 items-center justify-end space-x-2">
+            <div class="flex items-center">{% if current_user == post.author %}
+                <a class="text-[10px] px-1 border text-gray-500 border-gray-300 rounded shadow-sm w-16 text-center"
+                    href="{{ url_for('.edit', id=post.id) }}"> <span>Edit</span>
+                </a>
+                {% elif current_user.is_administrator() %}
+                <a class="text-[10px] px-1 border text-flasky-500 border-flasky-500 rounded shadow-sm w-16 text-center"
+                    href="{{ url_for('.edit', id=post.id) }}">
+                    <span class="">Edit
+                        Admin</span>
+                </a>
+                {% endif %}
+            </div>
+            <div class="text-[10px] px-1 border text-gray-500 border-gray-300 rounded shadow-sm w-16">
+                <a href="{{ url_for('.post', id=post.id) }}">
+                    <span class="">Permalink</span> </a>
+            </div>
+        </div>
+
     </div>
 
 </div>
