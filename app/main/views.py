@@ -2,7 +2,7 @@ import datetime as dt
 from inspect import currentframe
 import re
 import timeago
-from flask import render_template, session, redirect, url_for, flash, current_app
+from flask import render_template, session, redirect, url_for, flash, current_app, request
 from flask_login.utils import login_required, current_user
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm
@@ -20,6 +20,11 @@ def inject_user():
 @main.route('/', methods=['GET', 'POST'])
 def index():
     form = PostForm()
+    page = request.args.get('page', 1, type=int)
+    pagination = Post.query.order_by(Post.timestamp.desc()).paginate(
+        page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'], error_out=False)
+    posts = pagination.items
+
     if form.validate_on_submit() and current_user.can(Permission.WRITE):
         post = Post(body=form.body.data,
                     author=current_user._get_current_object())
@@ -27,10 +32,9 @@ def index():
         db.session.commit()
         flash('Post created successfully')
         return redirect(url_for('main.index'))
-    posts = Post.query.order_by(Post.timestamp.desc()).all()
     # flash('This is an error !', category='error')
     # flash('This is an informational message.', category='information',)
-    return render_template('index.html', form=form, posts=posts)
+    return render_template('index.html', form=form, posts=posts, pagination=pagination)
 
 
 @main.route('/saas', methods=['GET', 'POST'])
@@ -43,7 +47,12 @@ def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     user_last_seen_time_ago = timeago.format(
         user.last_seen, dt.datetime.utcnow())
-    return render_template('user.html', user=user, user_last_seen_time_ago=user_last_seen_time_ago)
+
+    page = request.args.get('page', 1, type=int)
+    pagination = user.posts.order_by(Post.timestamp.desc()).paginate(
+        page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'], error_out=False)
+    posts = pagination.items
+    return render_template('user.html', user=user, user_last_seen_time_ago=user_last_seen_time_ago, posts=posts, pagination=pagination)
 
 
 @main.route('/edit-profile', methods=['GET', 'POST'])

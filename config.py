@@ -17,7 +17,8 @@ class Config:
     MAIL_USE_TLS = True
     MAIL_USE_SSL = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    POST_MAX_LENGTH = 240
+    POST_MAX_LENGTH = 280
+    FLASKY_POSTS_PER_PAGE = 20
 
     @staticmethod
     def init_app(app):

@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
+{% import "partials/_macros.html" as macros %}
+
 {% block body %}
-<div class="w-[360px] mx-auto px-2">
+<div class="max-w-2xl w-full mx-auto px-2">
     <img class="img-rounded profile-thumbnail shadow rounded-full" src="{{ user.gravatar(size=128) }}">
     <span
         class=" mt-6 inline-block bg-rose-500 text-sm font-semibold px-2 py-1 bg-flasky-500 text-white rounded shadow-sm">
@@ -48,5 +50,17 @@
         </a>
         {% endif %}
     </div>
+    <p
+        class="mt-6 font-semibold text-lg underline decoration-flasky-500 underline-offset-1 tracking-wide text-flasky-600">
+        Your posts</p>
+    <div class="flex flex-col space-y-2 mt-2">
+
+        {% include 'partials/_posts.html' %}
+    </div>
+    {% if pagination %}
+    <div class="mt-2 mx-auto flex justify-center">
+        {{ macros.pagination_widget(pagination, '.user', username=user.username) }}
+    </div>
+    {% endif %}
 </div>
 {% endblock body %}
