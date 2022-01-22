@@ -17,9 +17,14 @@ h2 {
 h3 {
   @apply text-lg;
 }
+.markdown a {
+  @apply underline underline-offset-2 decoration-flasky-500 decoration-1  hover:text-flasky-600
+}
 
 @layer components {
   .flask-pagedown-preview img {
     @apply w-full h-auto object-cover rounded shadow-sm;
   }
 }
+
+

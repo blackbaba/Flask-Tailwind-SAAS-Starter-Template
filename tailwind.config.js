@@ -14,7 +14,7 @@ module.exports = {
       message: colors.green,
       warning: colors.yellow,
       emerald: colors.emerald,
-      flasky: colors.sky  // Set brand color here
+      flasky: colors.cyan  // Set brand color here
     },
   },
   plugins: [

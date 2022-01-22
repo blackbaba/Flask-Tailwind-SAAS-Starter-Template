@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% import "partials/_macros.html" as macros %}
+
+{% block title %}Flasky - {{ title }} {{ user.username }}{% endblock %}
+
+{% block body %}
+
+<div class="mx-auto flex flex-col justify-center items-center w-full">
+    <h1 class="text-gray-600 font-semibold">{{ title }} {{ user.username }}</h1>
+
+    <div class="text-sm font-semibold w-full text-flasky-600 max-w-2xl mt-2 py-6">
+        <table class="table-auto w-full text-left">
+            <thead>
+                <tr class="border-b-2 border-flasky-500">
+                    <th class="px-2">User</th>
+                    <th class="px-2">Since</th>
+                </tr>
+            </thead>
+            {% for follow in follows %}
+            {% if follow.user != user%}
+            <tr class="border-b">
+                <td class="px-2 py-4  items-center space-x-2">
+                    <a class="flex items-center space-x-6"
+                        href="{{ url_for('.user', username = follow.user.username) }}">
+                        <p>
+                            <img class="img-rounded" src="{{ follow.user.gravatar(size=32) }}">
+                        </p>
+                        <p>
+
+                            {{ follow.user.username }}
+                        </p>
+                    </a>
+                </td>
+                <td class="px-2 py-4">
+                    {{ timeago.format(
+                    follow.timestamp, dt.datetime.utcnow()) }}
+            </tr>
+
+
+
+
+            {% endif %}
+            {% endfor %}
+        </table>
+
+        <div class="mt-2 mx-auto flex justify-center">
+            {{ macros.pagination_widget(pagination, endpoint, username=user.username) }}
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock %}

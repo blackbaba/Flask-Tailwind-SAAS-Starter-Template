@@ -19,6 +19,8 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     POST_MAX_LENGTH = 280
     FLASKY_POSTS_PER_PAGE = 20
+    FLASKY_FOLLOWERS_PER_PAGE = 10
+    FLASKY_MAX_FOLLOWERS = 1000
 
     @staticmethod
     def init_app(app):
