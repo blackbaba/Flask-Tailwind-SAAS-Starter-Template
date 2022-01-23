@@ -10,7 +10,7 @@
     </a>
     {% if current_user.is_authenticated and user != current_user and
     user.is_following(current_user) %}
-    <span class="text-xs bg-flasky-500 text-white px-2 py-1 border border-flasky-500 rounded shadow-sm">Follows
+    <span class="text-xs text-gray-500 px-4 py-1 border rounded border-gray-400">Follows
         you</span>
     {% endif %}
     <div class="text-2xl text-gray-500 tracking-wider font-extrabold mt-2">{% if user.name %}
@@ -65,23 +65,23 @@
         {% endif %}
         <a class="hover:underline decoration-flasky-500" href="{{ url_for('.followers', username=user.username) }}">
             <span class="text-gray-800 font-bold">{{
-                user.followers.count()
+                user.followers.count() - 1
                 }}</span> followers
         </a>
         <a class="hover:underline decoration-flasky-500" href="{{ url_for('.followed_by', username=user.username) }}">
-            <span class="text-gray-800 font-bold">{{ user.followed.count() }}</span> following </a>
+            <span class="text-gray-800 font-bold">{{ user.followed.count() - 1}}</span> following </a>
 
     </div>
     <div class="flex items-center space-x-2">
         {% if user == current_user %}
-        <a class="px-2 py-1 rounded border border-flasky-500 text-flasky-500 font-semibold text-sm"
+        <a class="px-4 py-1 hover:bg-flasky-500 hover:shadow hover:text-white rounded border border-flasky-500 text-flasky-500 font-semibold text-sm"
             href="{{ url_for('main.edit_profile') }}"> Edit
             Profile
         </a>
         {% endif %}
 
         {% if current_user.is_administrator() %}
-        <a class="px-2 py-1 rounded border border-danger-500 text-danger-500 font-semibold text-sm"
+        <a class="px-4 py-1 hover:bg-white hover:shadow hover:text-danger-500 rounded border border-danger-500 text-white font-semibold text-sm bg-danger-500"
             href="{{ url_for('main.edit_profile_admin', username=user.username) }}">
             Edit Profile [Admin]
         </a>

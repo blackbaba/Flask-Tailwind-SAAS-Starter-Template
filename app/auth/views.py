@@ -1,4 +1,5 @@
 import datetime as dt
+import time
 from flask import render_template, flash, url_for, redirect, request, current_app
 from flask_login import login_required, logout_user, login_user, current_user
 from .. import db
@@ -10,6 +11,7 @@ from ..email import send_email
 
 @auth.before_app_request
 def before_request():
+    # time.sleep(0.1)  # Simulate time delay
     if current_user.is_authenticated:
         current_user.ping()
         if not current_user.confirmed and request.blueprint != 'auth' and request.endpoint != 'static':
