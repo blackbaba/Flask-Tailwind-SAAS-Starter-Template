@@ -5,9 +5,9 @@ import timeago
 from flask import make_response, render_template, session, redirect, url_for, flash, current_app, request, abort
 from flask_login.utils import login_required, current_user
 from . import main
-from .forms import EditProfileForm, EditProfileAdminForm, PostForm
+from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
 from .. import db
-from ..models import Permission, Role, User, Post
+from ..models import Permission, Role, User, Post, Comment
 from ..email import send_email, send_async_email
 from ..decorators import admin_required, permission_required
 
@@ -40,7 +40,7 @@ def index():
         flash('Post created successfully')
         return redirect(url_for('main.index'))
     # flash('This is a message.', category='information',) # error/information
-    return render_template('index.html', form=form, posts=posts, pagination=pagination, show_followed=show_followed)
+    return render_template('index.html', form=form, posts=posts, pagination=pagination, show_followed=show_followed, expand=False)
 
 
 @main.route('/all')
@@ -71,7 +71,6 @@ def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     user_last_seen_time_ago = timeago.format(
         user.last_seen, dt.datetime.utcnow())
-
     page = request.args.get('page', 1, type=int)
     pagination = user.posts.order_by(Post.timestamp.desc()).paginate(
         page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'], error_out=False)
@@ -127,10 +126,24 @@ def edit_profile_admin(username):
     return render_template('edit_profile_admin.html', form=form)
 
 
-@main.route('/post/<int:id>')
+@main.route('/post/<int:id>', methods=['GET', 'POST'])
 def post(id):
     post = Post.query.get_or_404(id)
-    return render_template('post.html', posts=[post], expand=True)
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment = Comment(body=form.body.data, post=post,
+                          author=current_user._get_current_object())
+        db.session.add(comment)
+        db.session.commit()
+        return redirect(url_for('.post', id=post.id, page=-1))
+    page = request.args.get('page', 1, type=int)
+    if page == -1:
+        page = (post.comments.count() -
+                1) // current_app.config['FLASKY_COMMENTS_PER_PAGE'] + 1
+    pagination = post.comments.order_by(Comment.timestamp.asc()).paginate(
+        page, per_page=current_app.config['FLASKY_COMMENTS_PER_PAGE'], error_out=False)
+    comments = pagination.items
+    return render_template('post.html', posts=[post], form=form, comments=comments, pagination=pagination, expand=True)
 
 
 @main.route('/edit/<int:id>', methods=['GET', 'POST'])
@@ -148,6 +161,40 @@ def edit(id):
         return redirect(url_for('.post', id=post.id))
     form.body.data = post.body
     return render_template('edit_post.html', form=form)
+
+
+@main.route('/moderate')
+@login_required
+@ permission_required(Permission.MODERATE)
+def moderate():
+    page = request.args.get('page', 1, type=int)
+    pagination = Comment.query.order_by(Comment.timestamp.desc()).paginate(
+        page, per_page=current_app.config['FLASKY_COMMENTS_PER_PAGE'], error_out=False)
+    comments = pagination.items
+    return render_template('moderate.html', comments=comments, pagination=pagination, page=page)
+
+
+@main.route('/moderate/enable/<int:id>')
+@login_required
+@permission_required(Permission.MODERATE)
+def moderate_enable(id):
+    comment = Comment.query.get_or_404(id)
+    comment.disabled = False
+    db.session.add(comment)
+    db.session.commit()
+    return redirect(url_for('.moderate', page=request.args.get('page', 1, type=int)))
+
+
+@main.route('/moderate/disable/<int:id>')
+@login_required
+@permission_required(Permission.MODERATE)
+def moderate_disable(id):
+    comment = Comment.query.get_or_404(id)
+    comment.disabled = True
+    db.session.add(comment)
+    db.session.commit()
+
+    return redirect(url_for('.moderate', page=request.args.get('page', 1, type=int)))
 
 
 @main.route('/follow/<username>')

@@ -1,8 +1,40 @@
 {% extends "base.html" %}
+{% import "partials/_macros.html" as macros %}
+
 {% block title %}Flasky - Post{% endblock %}
 {% block body %}
 <div class="max-w-2xl mx-auto">
 
     {% include 'partials/_posts.html' %}
+    <div class=" mt-4 text-lg font-semibold text-flasky-500" id="comments">Comments</div>
+    <form method="POST" class="flex flex-col">
+        {{ form.hidden_tag() }}
+        <div class="text-flasky-600">
+            {% for error in form.body.errors %}
+            <p class="my-2 border text-xs border-flasky-500 px-2 py-1 rounded shadow font-bold">{{ error }}</p>
+            {% endfor %}
+
+        </div>
+        {{ form.body.label(class=' text-sm font-semibold text-flasky-500') }}
+        {{ form.body(class ='mt-2 shadow appearance-none focus:border-flasky-500 focus:border-2 border-flasky-500
+        border
+        rounded w-full py-2 px-3 text-gray-700 leading-tight
+        focus:outline-none focus:shadow-outline', rows=4) }}
+
+
+        {{form.submit(class='hover:text-white hover:bg-flasky-500 cursor-pointer px-4 py-1 border
+        border-flasky-500
+        text-flasky-500
+        rounded mt-4 font-bold w-32 ')}}
+    </form>
+    <div class="mt-4">
+
+        {% include 'partials/_comments.html' %}
+    </div>
+    {% if pagination %}
+    <div class="mt-6">
+        {{ macros.pagination_widget(pagination, '.post', fragment='#comments', id=posts[0].id) }}
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

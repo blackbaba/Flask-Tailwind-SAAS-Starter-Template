@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% import "partials/_macros.html" as macros %}
+{% block title %}Flasky - Comment Moderation{% endblock %}
+{% block body %}
+<div class="max-w-2xl mx-auto">
+
+    <div class=" mt-4 text-lg font-semibold text-flasky-500" id="comments">Comment Moderation</div>
+    {% set moderate = True %}
+    {% include 'partials/_comments.html' %} {% if pagination %}
+    <div class="mt-6">
+        {{ macros.pagination_widget(pagination, '.moderate') }}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% for comment in comments %}
+<div class="flex flex-col py-4 space-y-2 text-xs text-gray-600 border-b border-gray-300">
+    <div class="flex items-center space-x-1">
+        <a href="{{ url_for('.user', username=comment.author.username) }}">
+            <img class="object-cover rounded-full" src="{{ comment.author.gravatar(size=24) }}">
+        </a>
+        <div class="comment-date">{{ timeago.format(
+            comment.timestamp, dt.datetime.utcnow()) }} by</div>
+        <div class="font-semibold"><a href="{{ url_for('.user', username=comment.author.username) }}">@{{
+                comment.author.username }}</a></div>
+    </div>
+    <div class="">
+
+        <div class="text-sm">
+            {% if comment.disabled %}
+            <p><i>This comment has been disabled by a moderator.</i></p>
+            {% endif %}
+            {% if moderate or not comment.disabled %}
+            {% if comment.body_html %}
+            {{ comment.body_html | safe }}
+            {% else %}
+            {{ comment.body }}
+            {% endif %}
+            {% endif %}
+        </div>
+        {% if current_user.can(Permission.MODERATE) %}
+        <br>
+        {% if comment.disabled %}
+        <a class="hover:bg-message-500 px-2 border border-message-500 hover:text-white bg-white text-message-500 rounded shadow-sm"
+            href="{{ url_for('.moderate_enable', id=comment.id, page=page) }}">Enable</a>
+        {% else %}
+        <a class="hover:bg-danger-500 px-2 border border-danger-500 hover:text-white bg-white text-danger-500 rounded shadow-sm"
+            href="{{ url_for('.moderate_disable', id=comment.id, page=page) }}">Disable</a>
+        {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endfor %}

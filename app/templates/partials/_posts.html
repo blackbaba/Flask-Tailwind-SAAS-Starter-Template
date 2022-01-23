@@ -1,5 +1,8 @@
 {% for post in posts %}
-<div class="flex border-b border-gray-200  hover:scale-[1.01] transition duration-300 py-4 px-2 hover:bg-flasky-50">
+
+<div class="flex border-b border-gray-200  transition duration-300 py-4 px-2  {% if expand==False %}
+            hover:bg-gray-50 hover:scale-[1.01] 
+            {% endif %}">
     <div class="flex items-start">
         <a href="{{ url_for('main.user', username=post.author.username) }}"> <img class="object-cover rounded-full"
                 src="{{ post.author.gravatar(size=36) }}"> </a>
@@ -18,9 +21,7 @@
                 post.timestamp, dt.datetime.utcnow()) }}</div>
         </div>
         <div class="text-xs lg:text-sm text-gray-700 min-h-16 markdown 
-        {% if expand==True %}
-            line-clamp-0
-            {% else %}
+        {% if expand==False %}
             line-clamp-4
             {% endif %}
         ">
@@ -31,42 +32,49 @@
             {{ post.body }}
             {% endif %}
         </div>
-        <div class="flex mt-4 items-center justify-end space-x-1 text-flasky-500">
-            <div class="flex items-center">{% if current_user == post.author %}
-                <a class="text-[10px] px-1     text-center" href="{{ url_for('.edit', id=post.id) }}">
-                    <span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
-                            <path fill-rule="evenodd"
-                                d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-                                clip-rule="evenodd" />
-                        </svg></span>
-                </a>
-                {% elif current_user.is_administrator() %}
-                <a class="text-[10px] px-1    text-center" href="{{ url_for('.edit', id=post.id) }}">
-                    <span class=""><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                                clip-rule="evenodd" />
-                        </svg></span>
-                </a>
+        <div class="flex mt-4 items-center justify-between space-x-1 text-flasky-500">
+            <a href="{{ url_for('.post', id=post.id) }}#comments"> <span
+                    class="text-[10px] inline-flex space-x-1 border hover:border-flasky-500 border-gray-300 rounded shadow-sm px-2 py-[1px]">
+                    <span class="text-gray-600 font-semibold">{{ post.comments.count() }}</span> <span
+                        class="text-gray-600 ">Comments</span>
+                </span> </a>
+            <div class="flex items-center">
+                <div class="flex items-center">{% if current_user == post.author %}
+                    <a class="text-[10px] px-1     text-center" href="{{ url_for('.edit', id=post.id) }}">
+                        <span><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path
+                                    d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                <path fill-rule="evenodd"
+                                    d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
+                                    clip-rule="evenodd" />
+                            </svg></span>
+                    </a>
+                    {% elif current_user.is_administrator() %}
+                    <a class="text-[10px] px-1    text-center" href="{{ url_for('.edit', id=post.id) }}">
+                        <span class=""><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+                                    clip-rule="evenodd" />
+                            </svg></span>
+                    </a>
+                    {% endif %}
+                </div>
+                {% if expand==False %}
+                <div class="text-[10px] px-1">
+
+                    <a href="{{ url_for('.post', id=post.id) }}">
+                        <span class=""><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                    clip-rule="evenodd" />
+                            </svg></span> </a>
+
+                </div>
                 {% endif %}
             </div>
-            {% if expand==True %}
-            {% else %}
-            <div class="text-[10px] px-1">
-
-                <a href="{{ url_for('.post', id=post.id) }}">
-                    <span class=""><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                clip-rule="evenodd" />
-                        </svg></span> </a>
-
-            </div>
-            {% endif %}
         </div>
 
     </div>

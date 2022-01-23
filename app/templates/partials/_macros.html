@@ -1,9 +1,9 @@
-{% macro pagination_widget(pagination, endpoint) %}
+{% macro pagination_widget(pagination, endpoint, fragment='') %}
 <div class="flex items-center text-xs space-x-2 ">
     <button class="border-flasky-500 rounded-full border text-flasky-500 hover:bg-flasky-500 hover:text-white" {% if not
         pagination.has_prev %} disabled {% endif %}>
         <a class=" h-8 w-8 flex items-center justify-center" href="{% if pagination.has_prev %}{{ url_for(endpoint,
-page = pagination.page - 1, **kwargs) }}{% else %}#{% endif %}"> &laquo;
+page = pagination.page - 1, **kwargs) }}{{ fragment }}{% else %}#{% endif %}"> &laquo;
         </a>
     </button>
     {% for p in pagination.iter_pages() %}
@@ -11,13 +11,15 @@ page = pagination.page - 1, **kwargs) }}{% else %}#{% endif %}"> &laquo;
     {% if p %}
     {% if p == pagination.page %} <button
         class=" flex items-center justify-center border-flasky-500 rounded-full border bg-flasky-500 text-white">
-        <a class=" h-8 w-8 flex items-center justify-center" href="{{ url_for(endpoint, page = p, **kwargs) }}">{{ p
+        <a class=" h-8 w-8 flex items-center justify-center"
+            href="{{ url_for(endpoint, page = p, **kwargs) }}{{ fragment }}">{{ p
             }}</a>
     </button>
     {% else %}
     <button
         class=" flex items-center justify-center border-flasky-500 rounded-full border text-flasky-500 hover:bg-flasky-500 hover:text-white">
-        <a class=" h-8 w-8 flex items-center justify-center" href="{{ url_for(endpoint, page = p, **kwargs) }}">{{ p
+        <a class=" h-8 w-8 flex items-center justify-center"
+            href="{{ url_for(endpoint, page = p, **kwargs) }}{{ fragment }}">{{ p
             }}</a>
     </button>
     {% endif %}
@@ -30,7 +32,7 @@ page = pagination.page - 1, **kwargs) }}{% else %}#{% endif %}"> &laquo;
         class=" flex items-center justify-center border-flasky-500 rounded-full border text-flasky-500 hover:bg-flasky-500 hover:text-white"
         {% if not pagination.has_next %} disabled {% endif %}> <a class=" h-8 w-8 flex items-center justify-center"
             href="{% if pagination.has_next %}{{ url_for(endpoint,
-page = pagination.page + 1, **kwargs) }}{% else %}#{% endif %}">
+page = pagination.page + 1, **kwargs) }}{{ fragment }}{% else %}#{% endif %}">
             &raquo;
         </a> </button>
 </div>

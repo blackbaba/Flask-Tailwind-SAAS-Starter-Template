@@ -15,7 +15,10 @@
 
     <div>
         <ul class="w-full flex items-center justify-start space-x-4 mx-2">
-
+            {% if current_user.can(Permission.MODERATE) %}
+            <li><a class="text-sm font-semibold hover:underline decoration-flasky-500 underline-offset-1"
+                    href="{{ url_for('main.moderate') }}">Moderate Comments</a></li> {%
+            endif %}
             {% if current_user.is_authenticated %}
             <a class="hover:text-flasky-500 text-lg font-semibold"
                 href="{{ url_for('main.user', username=current_user.username) }}">
