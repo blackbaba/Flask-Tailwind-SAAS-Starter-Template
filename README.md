@@ -1,4 +1,6 @@
-# Flask and TailwindCSS SAAS App Starter Template
+# (WORK IN PROGRESS) Flask and TailwindCSS SAAS App Starter Template
+
+## THIS TEMPLATE IS A WORK IN PROGRESS
 
 ![Flask Tailwind SAAS Starter Preview](app/static/preview.png)
 
