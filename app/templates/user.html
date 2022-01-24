@@ -4,10 +4,22 @@
 {% block body %}
 <div class="max-w-2xl w-full mx-auto px-2">
     <img class="img-rounded shadow rounded-full" src="{{ user.gravatar(size=128) }}">
-    <a class="mt-6  inline-block space-x-2 bg-rose-500 text-lg font-bold px-2  text-flasky-600 rounded "
-        href="{{url_for('main.user', username=user.username)}}">
-        @{{user.username}}
-    </a>
+
+
+    <div class="flex items-center mt-6 text-flasky-600 space-x-1">
+
+        <a class=" inline-block text-lg font-bold rounded " href="{{url_for('main.user', username=user.username)}}">
+            @{{user.username}}
+        </a>
+        {% if user.verified %}
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clip-rule="evenodd" />
+        </svg>
+        {% endif %}
+
+    </div>
     {% if current_user.is_authenticated and user != current_user and
     user.is_following(current_user) %}
     <span class="text-xs text-gray-500 px-4 py-1 border rounded border-gray-400">Follows

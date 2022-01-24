@@ -33,6 +33,9 @@
                 {% for error in form.active.errors %}
                 <p class="my-2 border text-xs border-flasky-500 px-2 py-1 rounded shadow font-bold">{{ error }}</p>
                 {% endfor %}
+                {% for error in form.verified.errors %}
+                <p class="my-2 border text-xs border-flasky-500 px-2 py-1 rounded shadow font-bold">{{ error }}</p>
+                {% endfor %}
             </div>
             {{ form.name.label(class='mt-6 text-sm font-semibold text-flasky-500') }}
             {{ form.name(class ='shadow appearance-none focus:border-flasky-500 focus:border-2 border-flasky-500 border
@@ -73,6 +76,11 @@
             <div class="mt-4 text-sm space-x-2 flex items-center text-flasky-500 font-semibold ">
                 {{ form.active.label }}
                 {{ form.active(class =' text-flasky-500 appearance-none focus:outline-none border-flasky-500
+                rounded') }}
+            </div>
+            <div class="mt-4 text-sm space-x-2 flex items-center text-flasky-500 font-semibold ">
+                {{ form.verified.label }}
+                {{ form.verified(class =' text-flasky-500 appearance-none focus:outline-none border-flasky-500
                 rounded') }}
             </div>
 

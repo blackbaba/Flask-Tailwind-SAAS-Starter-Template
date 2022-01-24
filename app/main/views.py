@@ -107,6 +107,7 @@ def edit_profile_admin(username):
         user.username = form.username.data
         user.confirmed = form.confirmed.data
         user.active = form.active.data
+        user.verified = form.verified.data
         user.role = Role.query.get(form.role.data)
         user.name = form.name.data
         user.location = form.location.data
@@ -119,6 +120,7 @@ def edit_profile_admin(username):
     form.username.data = user.username
     form.confirmed.data = user.confirmed
     form.active.data = user.active
+    form.verified.data = user.verified
     form.role.data = user.role_id
     form.name.data = user.name
     form.location.data = user.location
