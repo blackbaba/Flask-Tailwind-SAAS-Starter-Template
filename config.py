@@ -22,6 +22,7 @@ class Config:
     FLASKY_COMMENTS_PER_PAGE = 10
     FLASKY_FOLLOWERS_PER_PAGE = 10
     FLASKY_MAX_FOLLOWERS = 1000
+    AUTH_TOKEN_EXPIRY = 3600
 
     @staticmethod
     def init_app(app):

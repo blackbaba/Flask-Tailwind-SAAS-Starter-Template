@@ -148,8 +148,20 @@ def post(id):
     return render_template('post.html', posts=[post], form=form, comments=comments, pagination=pagination, expand=True)
 
 
-@main.route('/edit/<int:id>', methods=['GET', 'POST'])
+@main.route('/delete/<int:id>', methods=['GET'])
 @login_required
+def delete_post(id):
+    post = Post.query.get_or_404(id)
+    if current_user != post.author and not current_user.can(Permission.ADMIN):
+        abort(403)
+    db.session.delete(post)
+    db.session.commit()
+    flash('The post has been deleted.')
+    return redirect(url_for('main.index'))
+
+
+@ main.route('/edit/<int:id>', methods=['GET', 'POST'])
+@ login_required
 def edit(id):
     post = Post.query.get_or_404(id)
     if current_user != post.author and not current_user.can(Permission.ADMIN):
@@ -165,8 +177,8 @@ def edit(id):
     return render_template('edit_post.html', form=form)
 
 
-@main.route('/moderate')
-@login_required
+@ main.route('/moderate')
+@ login_required
 @ permission_required(Permission.MODERATE)
 def moderate():
     page = request.args.get('page', 1, type=int)
@@ -176,9 +188,9 @@ def moderate():
     return render_template('moderate.html', comments=comments, pagination=pagination, page=page)
 
 
-@main.route('/moderate/enable/<int:id>')
-@login_required
-@permission_required(Permission.MODERATE)
+@ main.route('/moderate/enable/<int:id>')
+@ login_required
+@ permission_required(Permission.MODERATE)
 def moderate_enable(id):
     comment = Comment.query.get_or_404(id)
     comment.disabled = False
@@ -187,9 +199,9 @@ def moderate_enable(id):
     return redirect(url_for('.moderate', page=request.args.get('page', 1, type=int)))
 
 
-@main.route('/moderate/disable/<int:id>')
-@login_required
-@permission_required(Permission.MODERATE)
+@ main.route('/moderate/disable/<int:id>')
+@ login_required
+@ permission_required(Permission.MODERATE)
 def moderate_disable(id):
     comment = Comment.query.get_or_404(id)
     comment.disabled = True
@@ -199,9 +211,9 @@ def moderate_disable(id):
     return redirect(url_for('.moderate', page=request.args.get('page', 1, type=int)))
 
 
-@main.route('/follow/<username>')
-@login_required
-@permission_required(Permission.FOLLOW)
+@ main.route('/follow/<username>')
+@ login_required
+@ permission_required(Permission.FOLLOW)
 def follow(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
@@ -217,9 +229,9 @@ def follow(username):
     return redirect(url_for('main.user', username=username))
 
 
-@main.route('/unfollow/<username>')
-@login_required
-@permission_required(Permission.FOLLOW)
+@ main.route('/unfollow/<username>')
+@ login_required
+@ permission_required(Permission.FOLLOW)
 def unfollow(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
@@ -234,7 +246,7 @@ def unfollow(username):
     return redirect(url_for('.user', username=username))
 
 
-@main.route('/followers/<username>')
+@ main.route('/followers/<username>')
 def followers(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
@@ -251,7 +263,7 @@ def followers(username):
                            follows=follows)
 
 
-@main.route('/followed_by/<username>')
+@ main.route('/followed_by/<username>')
 def followed_by(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
@@ -268,23 +280,23 @@ def followed_by(username):
                            follows=follows)
 
 
-@main.route('/terms-and-conditions')
+@ main.route('/terms-and-conditions')
 def terms_conditions():
     return "Terms and conditions page"
 
 
-@main.route('/privacy')
+@ main.route('/privacy')
 def privacy():
     return "Privacy policy page"
 
 
-@main.route('/admin')
-@login_required
-@admin_required
+@ main.route('/admin')
+@ login_required
+@ admin_required
 def for_admins_only():
     return 'Administrator Access'
 
 
-@main.route('/health')
+@ main.route('/health')
 def health_check():
     return render_template('health.html')
