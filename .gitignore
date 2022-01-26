@@ -4,10 +4,10 @@
 .DS_Store
 *.log
 *.logs
-logs/*
 
 venv
 node_modules
+tmp/coverage/*
 __pycache__
 .webassets-cache
 
