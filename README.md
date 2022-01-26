@@ -4,6 +4,8 @@
 
 ![Flask Tailwind SAAS Starter Preview](app/static/preview.png)
 
+![Flask Tailwind SAAS Starter Preview](app/static/preview2.png)
+
 ## How to use
 
 1. Clone this repo and create a virtual environment (`python3 -m venv venv`) for use with this application.
