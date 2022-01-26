@@ -5,7 +5,12 @@ import sys
 import click
 from app import create_app, db
 from app.models import Permission, User, Role
-from flask_migrate import Migrate
+from flask_migrate import Migrate, upgrade
+from dotenv import load_dotenv
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+if os.path.exists(dotenv_path):
+    load_dotenv(dotenv_path)
+
 
 app = create_app(os.getenv('FLASK_ENV') or 'default')
 migrate = Migrate(app, db)
@@ -20,6 +25,14 @@ if os.environ.get('FLASK_COVERAGE'):
 @app.shell_context_processor
 def make_shell_context():
     return dict(db=db, User=User, Role=Role, Permission=Permission)
+
+
+# Deploy application
+@app.cli.command()
+def deploy():
+    upgrade()
+    Role.insert_roles()
+    User.add_self_follows()
 
 
 # Run tests
@@ -44,3 +57,19 @@ def test(coverage):
         COV.html_report(directory=covdir)
         print(f"HTML version: file://{covdir}/index.html")
         COV.erase()
+
+
+# DOESNT WORK WITH FLASK 2
+# https://github.com/pallets/flask/pull/2781
+
+@app.cli.command()
+@click.option('--length', default=25,
+              help='Number of functions to include in the profiler report.')
+@click.option('--profile-dir', default=None,
+              help='Directory where profiler data files are saved.')
+def profile(length, profile_dir):
+    """Start the application under the code profiler."""
+    from werkzeug.middleware.profiler import ProfilerMiddleware
+    app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[length],
+                                      profile_dir=profile_dir)
+    app.run(debug=False)

@@ -3,6 +3,7 @@ from inspect import currentframe
 import re
 import timeago
 from flask import make_response, render_template, session, redirect, url_for, flash, current_app, request, abort
+from flask_sqlalchemy import get_debug_queries
 from flask_login.utils import login_required, current_user
 from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
@@ -160,7 +161,7 @@ def delete_post(id):
     return redirect(url_for('main.index'))
 
 
-@ main.route('/edit/<int:id>', methods=['GET', 'POST'])
+@main.route('/edit/<int:id>', methods=['GET', 'POST'])
 @ login_required
 def edit(id):
     post = Post.query.get_or_404(id)
@@ -177,7 +178,7 @@ def edit(id):
     return render_template('edit_post.html', form=form)
 
 
-@ main.route('/moderate')
+@main.route('/moderate')
 @ login_required
 @ permission_required(Permission.MODERATE)
 def moderate():
@@ -188,7 +189,7 @@ def moderate():
     return render_template('moderate.html', comments=comments, pagination=pagination, page=page)
 
 
-@ main.route('/moderate/enable/<int:id>')
+@main.route('/moderate/enable/<int:id>')
 @ login_required
 @ permission_required(Permission.MODERATE)
 def moderate_enable(id):
@@ -199,7 +200,7 @@ def moderate_enable(id):
     return redirect(url_for('.moderate', page=request.args.get('page', 1, type=int)))
 
 
-@ main.route('/moderate/disable/<int:id>')
+@main.route('/moderate/disable/<int:id>')
 @ login_required
 @ permission_required(Permission.MODERATE)
 def moderate_disable(id):
@@ -211,7 +212,7 @@ def moderate_disable(id):
     return redirect(url_for('.moderate', page=request.args.get('page', 1, type=int)))
 
 
-@ main.route('/follow/<username>')
+@main.route('/follow/<username>')
 @ login_required
 @ permission_required(Permission.FOLLOW)
 def follow(username):
@@ -229,7 +230,7 @@ def follow(username):
     return redirect(url_for('main.user', username=username))
 
 
-@ main.route('/unfollow/<username>')
+@main.route('/unfollow/<username>')
 @ login_required
 @ permission_required(Permission.FOLLOW)
 def unfollow(username):
@@ -246,7 +247,7 @@ def unfollow(username):
     return redirect(url_for('.user', username=username))
 
 
-@ main.route('/followers/<username>')
+@main.route('/followers/<username>')
 def followers(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
@@ -263,7 +264,7 @@ def followers(username):
                            follows=follows)
 
 
-@ main.route('/followed_by/<username>')
+@main.route('/followed_by/<username>')
 def followed_by(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
@@ -280,26 +281,35 @@ def followed_by(username):
                            follows=follows)
 
 
-@ main.route('/terms-and-conditions')
+@main.route('/terms-and-conditions')
 def terms_conditions():
     return "Terms and conditions page"
 
 
-@ main.route('/privacy')
+@main.route('/privacy')
 def privacy():
     return "Privacy policy page"
 
 
-@ main.route('/admin')
+@main.route('/admin')
 @ login_required
 @ admin_required
 def for_admins_only():
     return 'Administrator Access'
 
 
-@ main.route('/health')
+@main.route('/health')
 def health_check():
     return render_template('health.html')
+
+
+@main.after_app_request
+def after_request(response):
+    for query in get_debug_queries():
+        if query.duration >= current_app.config['FLASKY_SLOW_DB_QUERY_TIME']:
+            current_app.logger.warning('Slow query: %s\nParameters: %s\nDuration: %fs\nContext: %s\n' % (
+                query.statement, query.parameters, query.duration, query.context))
+    return response
 
 
 @main.route('/shutdown')

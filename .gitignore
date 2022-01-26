@@ -2,6 +2,9 @@
 .env
 *.sqlite
 .DS_Store
+*.log
+*.logs
+logs/*
 
 venv
 node_modules
@@ -10,3 +13,7 @@ __pycache__
 
 index.css
 tailwindcss
+app/static/dist/css/*
+app/static/dist/js/*
+app/static/dist/images/*
+app/static/dist/audio/*

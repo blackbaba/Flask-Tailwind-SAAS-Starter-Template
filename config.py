@@ -22,6 +22,8 @@ class Config:
     FLASKY_COMMENTS_PER_PAGE = 10
     FLASKY_FOLLOWERS_PER_PAGE = 10
     FLASKY_MAX_FOLLOWERS = 1000
+    SQLALCHEMY_RECORD_QUERIES = True
+    FLASKY_SLOW_DB_QUERY_TIME = 0.1
     AUTH_TOKEN_EXPIRY = 3600
     ASSETS_AUTO_BUILD = True
     ASSETS_DEBUG = True
@@ -44,17 +46,98 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
-    ASSETS_AUTO_BUILD = False
+    ASSETS_AUTO_BUILD = True
     ASSETS_DEBUG = False
-
     SQLALCHEMY_DATABASE_URI = os.environ.get(
         'DATABASE_URL') or 'sqlite:///' + os.path.join(BASEDIR, 'data.sqlite')
+
+    @classmethod
+    def init_app(cls, app):
+        Config.init_app(app)
+        from werkzeug.middleware.proxy_fix import ProxyFix
+        app.wsgi_app = ProxyFix(app.wsgi_app)
+
+        # Logging
+        import logging
+        from logging.handlers import SMTPHandler
+        credentials = None
+        secure = None
+        if getattr(cls, 'MAIL_USERNAME', None) is not None:
+            credentials = (cls.MAIL_USERNAME, cls.MAIL_PASSWORD)
+            if getattr(cls, 'MAIL_USE_TLS', None):
+                secure = ()
+        mail_handler = SMTPHandler(
+            mailhost=(cls.MAIL_SERVER, cls.MAIL_PORT),
+            fromaddr=cls.FLASKY_MAIL_SENDER,
+            toaddrs=[cls.FLASKY_ADMIN],
+            subject=cls.FLASKY_MAIL_SUBJECT_PREFIX + ' Application Error',
+            credentials=credentials,
+            secure=secure)
+        mail_handler.setLevel(logging.ERROR)
+        app.logger.addHandler(mail_handler)
+
+
+# UNI File Logs
+class UnixConfig(ProductionConfig):
+    @classmethod
+    def init_app(cls, app):
+        ProductionConfig.init_app(app)
+        # log to stderr
+        import logging
+        from logging.handlers import RotatingFileHandler
+        logs_path = os.path.join(BASEDIR, 'logs', 'flasky.log')
+        file_handler = RotatingFileHandler(
+            logs_path, maxBytes=10000, backupCount=5)
+        file_handler.setLevel(logging.INFO)
+        app.logger.addHandler(file_handler)
+
+
+# UNI Sys logs
+class UnixConfig2(ProductionConfig):
+    @classmethod
+    def init_app(cls, app):
+        ProductionConfig.init_app(app)
+
+      # log to syslog
+        import logging
+        from logging.handlers import SysLogHandler
+        syslog_handler = SysLogHandler()
+        syslog_handler.setLevel(logging.WARNING)
+        app.logger.addHandler(syslog_handler)
+
+
+class RenderConfig(ProductionConfig):
+    @classmethod
+    def init_app(cls, app):
+        ProductionConfig.init_app(app)
+        # log to stderr
+        import logging
+        from logging import StreamHandler
+        file_handler = StreamHandler()
+        file_handler.setLevel(logging.INFO)
+        app.logger.addHandler(file_handler)
+
+
+class DockerConfig(ProductionConfig):
+    @classmethod
+    def init_app(cls, app):
+        ProductionConfig.init_app(app)
+        # log to stderr
+        import logging
+        from logging import StreamHandler
+        file_handler = StreamHandler()
+        file_handler.setLevel(logging.INFO)
+        app.logger.addHandler(file_handler)
 
 
 config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
+    'render': RenderConfig,
+    'unix': UnixConfig,
+    'unix2': UnixConfig2,
+    'docker': DockerConfig,
     'default': DevelopmentConfig
 }
 
