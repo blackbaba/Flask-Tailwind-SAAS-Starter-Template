@@ -5,6 +5,7 @@ blinker==1.4
 certifi==2021.10.8
 charset-normalizer==2.0.10
 click==8.0.3
+coverage==6.3
 cssmin==0.2.0
 defusedxml==0.7.1
 dnspython==2.1.0

@@ -1,8 +1,8 @@
-"""setup models
+"""setup db
 
-Revision ID: f57a9b2d5dfe
+Revision ID: 3c694db1a62b
 Revises: 
-Create Date: 2022-01-24 18:55:48.560167
+Create Date: 2022-01-26 14:33:35.977343
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'f57a9b2d5dfe'
+revision = '3c694db1a62b'
 down_revision = None
 branch_labels = None
 depends_on = None
