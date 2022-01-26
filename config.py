@@ -23,6 +23,8 @@ class Config:
     FLASKY_FOLLOWERS_PER_PAGE = 10
     FLASKY_MAX_FOLLOWERS = 1000
     AUTH_TOKEN_EXPIRY = 3600
+    ASSETS_AUTO_BUILD = True
+    ASSETS_DEBUG = True
 
     @staticmethod
     def init_app(app):
@@ -30,14 +32,13 @@ class Config:
 
 
 class DevelopmentConfig(Config):
-    ASSETS_AUTO_BUILD = True
-    ASSETS_DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get(
         'DEV_DATABASE_URL') or 'sqlite:///' + os.path.join(BASEDIR, 'data-dev.sqlite')
 
 
 class TestingConfig(Config):
     TESTING = True
+    WTF_CSRF_ENABLED = False
     SQLALCHEMY_DATABASE_URI = os.environ.get(
         'TEST_DATABASE_URL') or 'sqlite://'
 
