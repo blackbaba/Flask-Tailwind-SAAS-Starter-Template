@@ -27,6 +27,10 @@ class Config:
     AUTH_TOKEN_EXPIRY = 3600
     ASSETS_AUTO_BUILD = True
     ASSETS_DEBUG = True
+    CACHE_NO_NULL_WARNING = True  # Supress warnings when cache set to null
+    CACHE_TYPE = 'NullCache'  # SimpleCache, RedisCache
+    # CACHE_REDIS_URL = 'redis://127.0.0.1:6379'
+    CACHE_DEFAULT_TIMEOUT = 60  # seconds
 
     @staticmethod
     def init_app(app):

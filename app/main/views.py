@@ -2,7 +2,7 @@ import datetime as dt
 from inspect import currentframe
 import re
 import timeago
-from flask import make_response, render_template, session, redirect, url_for, flash, current_app, request, abort
+from flask import make_response, render_template, session, redirect, url_for, flash, current_app, request, abort, jsonify
 from flask_sqlalchemy import get_debug_queries
 from flask_login.utils import login_required, current_user
 from . import main
@@ -11,11 +11,19 @@ from .. import db
 from ..models import Permission, Role, User, Post, Comment
 from ..email import send_email, send_async_email
 from ..decorators import admin_required, permission_required
+from .. import cache
 
 
 @main.context_processor
 def inject_user():
     return dict(dt=dt, timeago=timeago, current_app=current_app)
+
+
+@main.route('/all')
+@cache.cached(timeout=50)
+def all_posts():
+    posts = Post.query.order_by(Post.timestamp.desc()).all()
+    return jsonify([post.body_html for post in posts])
 
 
 @main.route('/', methods=['GET', 'POST'])
