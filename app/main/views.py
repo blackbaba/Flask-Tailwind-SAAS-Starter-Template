@@ -19,13 +19,6 @@ def inject_user():
     return dict(dt=dt, timeago=timeago, current_app=current_app)
 
 
-@main.route('/all')
-@cache.cached(timeout=50)
-def all_posts():
-    posts = Post.query.order_by(Post.timestamp.desc()).all()
-    return jsonify([post.body_html for post in posts])
-
-
 @main.route('/', methods=['GET', 'POST'])
 def index():
     form = PostForm()
